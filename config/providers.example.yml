@@ -1,0 +1,32 @@
+# Example multi-provider config for dsh-image-gen
+# Merge into ~/.dsh/profiles/web/cordis.patch.yml under the dsh-image-gen entry
+
+- id: dsh-image-gen
+  name: '@goodandready/dsh-image-gen'
+  config:
+    provider: fal
+    model: fal-ai/flux/dev
+    apiKeyEnv: FAL_API_KEY
+    replicateKeyEnv: REPLICATE_API_TOKEN
+    customKeyEnv: CUSTOM_IMAGE_API_KEY
+    fallbackProviders:
+      - fal
+      - replicate
+      - custom
+    providers:
+      - id: fal
+        keyEnv: FAL_API_KEY
+        models:
+          - { id: fal-ai/flux/schnell, use: drafts }
+          - { id: fal-ai/flux/dev, use: normal }
+          - { id: fal-ai/flux-pro, use: final }
+      - id: replicate
+        keyEnv: REPLICATE_API_TOKEN
+        models:
+          - { id: black-forest-labs/flux-schnell, use: drafts }
+          - { id: black-forest-labs/flux-dev, use: normal }
+      - id: custom
+        keyEnv: CUSTOM_IMAGE_API_KEY
+        baseURL: https://api.example.com/v1
+        models:
+          - { id: ideogram, use: text }
